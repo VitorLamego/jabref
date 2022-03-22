@@ -1,21 +1,17 @@
 package org.jabref.model.strings;
 
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
+
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.Arguments;
-import org.junit.jupiter.params.provider.MethodSource;
-
-import static org.junit.jupiter.api.Assertions.assertArrayEquals;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 class StringUtilTest {
 
@@ -147,8 +143,27 @@ class StringUtilTest {
     }
 
     @Test
-    void testGetPart() {
-        // Should be added
+    void testGetPartAnyString() {
+        // ID 1
+        assertEquals("A", StringUtil.getPart( "    A referência está no livro", 0, false));
+    }
+
+    @Test
+    void testGetPartIntoBraces() {
+        // ID 2
+        assertEquals("{A referência está no livro}", StringUtil.getPart(  "      {A referência está no livro}", 0, true));
+    }
+
+    @Test
+    void testIndexInMiddleOfString() {
+        // ID 3
+        assertEquals("livro", StringUtil.getPart( "{A referência está no livro}", 21, true));
+    }
+
+    @Test
+    void testGetPartWrongStartIndex() {
+        // ID 4
+        assertEquals("", StringUtil.getPart( "{A referência está no livro}", 50, true));
     }
 
     @Test
