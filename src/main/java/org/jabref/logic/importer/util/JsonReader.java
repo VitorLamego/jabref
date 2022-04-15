@@ -1,13 +1,13 @@
 package org.jabref.logic.importer.util;
 
-import java.io.IOException;
-import java.io.InputStream;
-
-import org.jabref.logic.importer.ParseException;
-
 import com.google.common.base.Charsets;
 import kong.unirest.json.JSONException;
+import kong.unirest.json.JSONArray;
 import kong.unirest.json.JSONObject;
+import org.jabref.logic.importer.ParseException;
+
+import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * Converts an {@link InputStream} into a {@link JSONObject}.
@@ -19,6 +19,17 @@ public class JsonReader {
      *
      * @return A {@link JSONObject}. An empty JSON object is returned in the case an empty stream is passed.
      */
+    public static JSONArray toJsonArray(InputStream stream) throws ParseException {
+        try {
+            String inpStr = new String((stream.readAllBytes()), Charsets.UTF_8);
+            if (inpStr.isBlank()) {
+                return new JSONArray();
+            }
+            return new JSONArray(inpStr);
+        } catch (IOException | JSONException e) {
+            throw new ParseException(e);
+        }
+    }
     public static JSONObject toJsonObject(InputStream inputStream) throws ParseException {
         try {
             String inputStr = new String((inputStream.readAllBytes()), Charsets.UTF_8);
